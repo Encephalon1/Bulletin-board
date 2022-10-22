@@ -1,0 +1,45 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Ads
+{% endblock title %}
+
+{% block content %}
+    {% for single_ad in ads %}
+<a href="{% url 'single_ad' single_ad.id %}"> <u> {{ single_ad.title }} </u> </a> <br>
+        {{ single_ad.date_and_time_of_creation|date:'d M Y' }} <br>
+        {{ single_ad.ad_text|truncatewords:20 }} <br>
+    {% if single_ad.content %}
+        {{ single_ad.content }} <br>
+    {% endif %}
+        {{ single_ad.category.name }} <br>
+<br>
+    {% endfor %}
+
+    {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% for model in models %}
+    <div class="model-class">
+        {{ model.name }}
+    </div>
+{% endfor %}
+
+{% endblock content %}

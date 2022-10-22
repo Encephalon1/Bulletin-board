@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Ad
+{% endblock title %}
+
+{% block content %}
+       <p> {{ ad.title }} <br>
+        {{ ad.date_and_time_of_creation|date:'d M Y' }} <br>
+        {{ ad.ad_text|truncatewords:20 }} <br>
+    {% if single_ad.content %}
+        {{ ad.content }} <br>
+    {% endif %}
+           {{ ad.category.name }} <br> </p>
+
+<p>Отклики:</p>
+<p>{% for reply in replies %}
+        {{ reply.resp_text }}
+    {% endfor %} </p>
+{% endblock content %}
