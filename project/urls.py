@@ -23,5 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(ckeditor_views.browse)), name='ckeditor_browse'),
-    path('ads/', include('ads.urls'))
+    path('ads/', include('ads.urls')),
+    path('', include('protect.urls')),
+    path('accounts/', include('allauth.urls'))
 ]
