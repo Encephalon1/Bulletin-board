@@ -5,16 +5,14 @@ Ads
 {% endblock title %}
 
 {% block content %}
-    {% for single_ad in ads %}
-<a href="{% url 'single_ad' single_ad.id %}"> <u> {{ single_ad.title }} </u> </a> <br>
-        {{ single_ad.date_and_time_of_creation|date:'d M Y' }} <br>
-        {{ single_ad.ad_text|truncatewords:20 }} <br>
-    {% if single_ad.content %}
-
-  <img src="media/{{single_ad.content}}" width="330"><br>
-    {% endif %}
-        {{ single_ad.category.name }}<br>
-        {{ single_ad.author }}<br>
+    {% for reply in replies %}
+        <p>{{ reply.ad.title }} <br>
+        {{ reply.ad.ad_text }} <br>
+            {{ reply.ad.category.name }} <br></p>
+<br>
+<p>Отклики:</p>
+        <p>{{ reply.author }}<br>
+            {{ reply.resp_text }} <br></p>
 <br>
     {% endfor %}
 

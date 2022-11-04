@@ -14,10 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.template.defaulttags import url
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from ckeditor_uploader import views as ckeditor_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +28,5 @@ urlpatterns = [
     path('ckeditor/browse/', never_cache(login_required(ckeditor_views.browse)), name='ckeditor_browse'),
     path('ads/', include('ads.urls')),
     path('', include('protect.urls')),
-    path('accounts/', include('allauth.urls'))
-]
+    path('accounts/', include('allauth.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
