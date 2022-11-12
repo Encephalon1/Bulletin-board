@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from ckeditor_uploader.fields import RichTextUploadingField
+from django.core.mail import send_mail
 
 
 class Category(models.Model):
@@ -28,6 +28,16 @@ class Reply(models.Model):
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
     resp_text = models.TextField()
     accept_reply = models.BooleanField(default=False)
+
+    def mail(self):
+        if self.accept_reply == True:
+            send_mail(
+                subject='Take reply',
+                message=f'Ваш отклик на объявление {Reply.objects.get(id=self.pk).ad.title} от автора '
+                        f'{Reply.objects.get(id=self.pk).ad.author} принят.',
+                from_email='viizdevaetes@mail.ru',
+                recipient_list=[Reply.objects.get(id=self.pk).author.email]
+            )
 
     def get_absolute_url(self):
         return reverse('single_ad', args=[str(self.id)])

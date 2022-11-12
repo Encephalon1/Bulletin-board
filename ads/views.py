@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.mail import send_mail
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
 from .forms import AdForm, ReplyForm
@@ -45,4 +46,11 @@ class ReplyCreate(CreateView):
         reply.author = self.request.user
         ad_id = self.kwargs['pk']
         reply.ad = get_object_or_404(Ad, id=ad_id)
+        mail_user = Ad.objects.get(id=ad_id).author.email
+        send_mail(
+            subject='Reply',
+            message='Вы получили отклик на ваше объявление. Вы можете посмотреть его в своем личном кабинете',
+            from_email='viizdevaetes@mail.ru',
+            recipient_list=[mail_user]
+        )
         return super().form_valid(form)
