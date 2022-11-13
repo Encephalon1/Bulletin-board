@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
@@ -30,6 +31,20 @@ class AdCreate(CreateView):
     model = Ad
     template_name = 'ad_edit.html'
 
+    def home(self, request):
+        images = Ad.objects.all()
+        context = {
+            'images': images
+        }
+        return render(request, 'ad_edit.html', context)
+
+    def file_upload(self, request):
+        if request.method == 'POST':
+            my_files = request.FILES.get('file')
+            Ad.objects.create(content=my_files)
+            return HttpResponse('ads/img/')
+        return JsonResponse({'post': 'fasle'})
+
     def form_valid(self, form):
         ad = form.save(commit=False)
         ad.author = self.request.user
@@ -54,3 +69,10 @@ class ReplyCreate(CreateView):
             recipient_list=[mail_user]
         )
         return super().form_valid(form)
+
+
+def take_reply(request, pk):
+    reply = Reply.objects.select_related('ad').get(ad__id=pk)
+    reply.accept_reply = True
+    reply.save()
+    return redirect('/')

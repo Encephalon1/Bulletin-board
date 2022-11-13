@@ -1,15 +1,23 @@
-{% extends 'flatpages/default.html' %}
+{% extends 'base1.html' %}
 
 {% block content %}
 <h1>Объявление</h1>
 <hr>
-<form action="" method="post" enctype="multipart/form-data">
+<form enctype='multipart/form-data' action=" " method='POST'>
     {% csrf_token %}
     {{ form.media }}
     {{ form.as_p }}
     <input type="submit" value="Save" name="content" multiple>
 </form>
-{% for img in content %}
+<!-- {% for img in content %}
     <img src="media/{{img.content}}" width="330">
-    {% endfor %}
+    {% endfor %} -->
+<h6>UPLOAD MULTIPLE IMAGES NOW</h6>
+<br>
+<form enctype='multipart/form-data' action="upload/" method='POST' class="dropzone dz" id="my-dropzone" >
+    {% csrf_token %}
+    <div class="fallback">
+      <input name="file" type="file" multiple />
+    </div>
+</form>
 {% endblock content %}
